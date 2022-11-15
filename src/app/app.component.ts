@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { fromEventPattern } from 'rxjs';
 import { PaupersRedditService } from './paupers-reddit.service';
-import { Child, TopData, PaupersReddit } from './PaupersReddit';
+import { Child, PaupersReddit } from './PaupersReddit';
 import { compileNgModule } from '@angular/compiler';
 
 @Component({
@@ -10,24 +10,21 @@ import { compileNgModule } from '@angular/compiler';
 	styleUrls: [ './app.component.css' ],
 	providers: [ PaupersRedditService ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 	title = 'AngularReddit';
 
 	redditPosts: Child[] = [];
+	post: PaupersReddit = {} as PaupersReddit;
+	search: string = '';
 
 	constructor(private pr: PaupersRedditService) {}
-	ngOnInit(): void {
-		this.TopTen('aww');
-	}
+	SearchReddit(kind: string) {
+		this.redditPosts = [];
+		this.pr.GetPostByName(kind).subscribe((post: PaupersReddit) => {
+			console.log(post);
+			this.post = post;
 
-	TopTen(name: string): void {
-		this.pr.GetPostByName(name).subscribe((result: PaupersReddit) => {
-			for (let i: number = 0; i < 10; i++) {
-				this.redditPosts.push(result.data.children[i]);
-			}
-			for (let i = 0; i < this.redditPosts.length; i++) {
-				console.log(`Title: ${this.redditPosts[i].data.title}\nbaseURL: ${this.redditPosts[i].data.thumbnail}`);
-			}
+			this.redditPosts = this.post.data.children;
 		});
 	}
 }

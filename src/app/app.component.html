@@ -351,7 +351,16 @@
   </div>
 
   <h2>Reddit Posts</h2>
-  <p>idk pls help</p>
+  <input type= "text" name= "search"/>
+  <button (click)="SearchReddit(search)">Search</button>
+  
+  
+  <div *ngFor="let r of redditPosts; index as i">
+    
+  <a href="{{'https://www.reddit.com' + r.data.permalink}}">View Thread:<img src="{{r.data.thumbnail}}"/></a>
+  <p>Post: {{r.data.title}}</p>
+  
+  </div>
  
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
